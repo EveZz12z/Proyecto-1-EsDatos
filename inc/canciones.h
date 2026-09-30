@@ -1,3 +1,5 @@
+/*Autor; Pablo Serón*/
+
 
 /*En este archivo.h se definira la estructura Cancion y 
 las constantes compartidas por
