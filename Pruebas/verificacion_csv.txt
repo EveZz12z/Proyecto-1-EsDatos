@@ -1,0 +1,16 @@
+--- Primeras lineas ---
+id,título,artista,album,genero,duracion_seg,año,n_reproducciones
+46,Ritmo Sombra,Lit_Killah,Noche Silencio,Rap,827,2024,930515
+1,Ritmo Camino,Aventura,Noche Silencio,Cumbia_Ranchera,501,1975,128526
+24,Cielo Silencio,Canserbero,Camino Luna,Bachata,762,1984,534756
+--- Total de lineas (esperado: canciones + 1 del encabezado) ---
+51
+--- Ids repetidos (vacio = correcto) ---
+--- Canciones por genero ---
+     11 Bachata
+      8 Cumbia
+      7 Cumbia_Ranchera
+      8 Rap
+      6 Reggaeton
+      7 Salsa
+      3 Trap

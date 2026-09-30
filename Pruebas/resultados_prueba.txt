@@ -1,0 +1,63 @@
+=== Prueba 1: generar ===
+generar 50 -> 50 (esperado 50)
+generar 0 -> -1 (esperado -1)
+generar 1001 -> -1 (esperado -1)
+Primeras 3 canciones:
+  id=9 | Silencio Ritmo | Zúmbale_Primo | Ritmo Camino | Rap | 320 s | 1972 | 192718 rep
+  id=14 | Luna Cielo | Lit_Killah | Luna Luna | Trap | 303 s | 1972 | 664816 rep
+  id=50 | Camino Noche | Lit_Killah | Camino Cielo | Salsa | 300 s | 2006 | 662612 rep
+
+=== Prueba 2: artistas ===
+Artistas distintos: 8 (esperado 8 o menos)
+  1. Zúmbale_Primo
+  2. Lit_Killah
+  3. Milo_J
+  4. Aventura
+  5. Duki
+  6. Canserbero
+  7. Gipsy_Kings
+  8. Los_Charros_de_Lumaco
+
+=== Prueba 3: generos y conteo ===
+  Rap              10
+  Trap             8
+  Salsa            7
+  Reggaeton        5
+  Bachata          5
+  Cumbia_Ranchera  9
+  Cumbia           6
+Suma de conteos: 50 (esperado 50)
+Genero inexistente -> 0 (esperado 0)
+catalogo NULL -> -1 (esperado -1)
+
+=== Prueba 4: listar por genero (Rap) ===
+Encontradas: 10 (debe coincidir con el conteo de Rap)
+  pos 0 -> id 9, Silencio Ritmo
+  pos 3 -> id 3, Camino Ritmo
+  pos 14 -> id 46, Ritmo Camino
+  pos 19 -> id 19, Cielo Camino
+  pos 21 -> id 15, Noche Fuego
+  pos 23 -> id 31, Ritmo Silencio
+  pos 25 -> id 45, Sombra Ritmo
+  pos 32 -> id 43, Sombra Noche
+  pos 40 -> id 7, Luna Cielo
+  pos 48 -> id 32, Fuego Noche
+
+=== Prueba 5: exportar ===
+exportar -> 50 (esperado 50)
+ruta invalida -> -1 (esperado -1)
+catalogo NULL -> -1 (esperado -1)
+
+=== Prueba 6: importar ===
+archivo_existe prueba.csv -> 1 (esperado 1)
+archivo_existe no_existe.csv -> 0 (esperado 0)
+cargadas -> 50 (esperado 50)
+archivo inexistente -> -1 (esperado -1)
+datos identicos a los de memoria -> 1 (esperado 1)
+
+=== Prueba 7: arranque ===
+1ra vez (genera) -> 30 (esperado 30)
+archivo creado -> 1 (esperado 1)
+2da vez (lee) -> 30 (esperado 30, no 999)
+mismo catalogo en ambas -> 1 (esperado 1)
+ruta NULL -> -1 (esperado -1)
