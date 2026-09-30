@@ -3,7 +3,14 @@
 las constantes compartidas por
 todos los módulos del proyecto.*/
 
-
+/*Nota "infdef" y "endif" sirven para que el contenido dentro de un archivo.h 
+se incluya solo una vez por archivo compilado esto es para que no se reciba por asi decirlo
+una misma informacion 2 veces por lo que lo haye una buena practica para que no haya
+errores de compilacion (mas cuando mas de una persona va a trabajar con este archivo y los demas)*/
+/**
+ * @brief 
+ * 
+ */
 #ifndef CANCIONES_H
 #define CANCIONES_H
 
@@ -23,14 +30,20 @@ todos los módulos del proyecto.*/
 #define ANHO_MAX           2026
 #define REPRODUCCIONES_MAX 1000000
 
+/* Autor: Pablo Serón */
+
 //Representara las canciones del catalogo
+/**
+ * @brief 
+ * 
+ */
 typedef struct _cancion {
     int  id;                        /* Único y autoincremental (segun lo pedido) */
     char titulo[TITULO_MAX];
     char artista[ARTISTA_MAX];
     char album[ALBUM_MAX];
     char genero[GENERO_MAX];
-    double  duracion_seg;
+    int  duracion_seg;
     int  anho;
     int  num_reproducciones;
 } Cancion;
