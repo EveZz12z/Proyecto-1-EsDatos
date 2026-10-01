@@ -96,8 +96,7 @@ void consultar_fila(Cancion filas[MAX_CANCIONES]){
  * 
  * @param filas Arreglo de estructuras Cancion que representa a una fila de reprodución 
  * @param id Entero id de la cancion
- * @return int Retorna -1 si llegase a fallar la función, retorna 1 si
- *             se encuentra con un elemento vacío y retorna i (el indice)
+ * @return int Retorna -1 si llegase a fallar la función y retorna i (el indice)
  *             si encuentra la id correspondiente en el arreglo.
  */
 int buscar_indice_por_id(Cancion filas[MAX_CANCIONES], int id){
@@ -120,7 +119,7 @@ int buscar_indice_por_id(Cancion filas[MAX_CANCIONES], int id){
  * @return int Retorna 0 si no encuentra la id, retorna 1 si se ha borrado la canción de
  *             lista de reproducción
  */
-int eliminar_cancion_por_id_de_fila(Cancion filas[MAX_CANCIONES], Cancion cancion){
+int eliminar_cancion_por_id(Cancion filas[MAX_CANCIONES], Cancion cancion){
     int indice = buscar_indice_por_id(filas, cancion.id);
 
     if(indice == -1){
@@ -135,6 +134,79 @@ int eliminar_cancion_por_id_de_fila(Cancion filas[MAX_CANCIONES], Cancion cancio
 
         printf("Se ha borrado la canción de la lista de reproducción\n");
         return 1;
+}
+
+/**
+ * @brief Consulta el historial de las canciones reproducidas
+ * 
+ * @param historial Arreglo de estructuras Cancion que representan un historial
+ * @param k Entero tamaño del historial
+ */
+void consultar_historial_fila(Cancion historial[], int k){
+    if(historial[k-1].id ==-1 ){
+            if(k-1 == 0)
+                printf("Historial vacío\n");
+            return;
+        }
+
+    printf("=========== HISTORIAL ===========");
+    for(int i = 0; i < k; i++){
+        printf("%d |%d %s %s %d\n", i + 1, historial[i].id, historial[i].titulo,
+        historial->artista, historial->num_reproducciones);
+    }
+    
+    return;
+}
+
+/**
+ * @brief Agregar una canción reproducida al historial
+ * 
+ * @param historial Arreglo de estructuras Cancion que representan un historial
+ * @param cancion Tipo Cancion a introducir en historial
+ * @param k Entero tamaño del historial
+ */
+void agregar_a_historial(Cancion historial[], Cancion cancion, int k) {
+    for (int i = 0; i < k; i++) {
+        if (historial[i].id == -1) {
+            /* hay hueco en i para introducir la canción en el historial*/
+            for (int j = i; j > 0; j--) {
+                historial[j] = historial[j - 1];
+            }
+            historial[0] = cancion;
+            return;
+        }
+    }
+
+    /* Si llega hasta aquí, el historial está lleno */
+    for (int i = k - 1; i > 0; i--) {
+        historial[i] = historial[i - 1];  
+    }
+
+    historial[0] = cancion;
+    return;
+}
+
+
+/**
+ * @brief Reproduce una canción de la lista de reproducción y suma la cantidad de reproducciones de la canción
+ * 
+ * @param historial Arreglo que representa un historial de canciones reproducidas de tamaño K
+ * @param cancion Tipo Cancion que se esta reproduciendo
+ * @param k Entero que es el tamaño del historial.
+ * @return int Retorna -1 si falla, retorna 1 si se agrega reproduce, agrega al historial y suma la cantidad de reproducciones de la canción.
+ */
+int reproduccion_fila(Cancion historial[],Cancion *cancion, int k){
+    if (cancion == NULL || historial == NULL || k <= 0) 
+        return -1;
+
+    if(cancion->id != -1){
+        printf("%d %s %s\n", cancion->id, cancion->titulo,cancion->artista);
+        cancion->num_reproducciones++;
+        agregar_a_historial(historial, *cancion, k);
+        return 1;
+    }
+
+    return 0;
 }
 
 

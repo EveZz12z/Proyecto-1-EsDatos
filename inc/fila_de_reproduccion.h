@@ -16,7 +16,11 @@ int detectar_id(Cancion filas[MAX_CANCIONES], int id);
 int anadir_cancion(Cancion filas[MAX_CANCIONES], Cancion cancion);
 void consultar_fila(Cancion filas[MAX_CANCIONES]);
 int buscar_indice_por_id(Cancion filas[MAX_CANCIONES], int id);
-int eliminar_cancion_por_id_de_fila(Cancion filas[MAX_CANCIONES], Cancion cancion);
+int eliminar_cancion_por_id(Cancion filas[MAX_CANCIONES], Cancion cancion);
+void agregar_a_historial(Cancion historial[], Cancion cancion, int k);
+int reproduccion_fila(Cancion historial[],Cancion *cancion, int k);
+void consultar_historial_fila(Cancion historial[], int k);
+
 
 
 
