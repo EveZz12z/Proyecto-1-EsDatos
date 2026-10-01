@@ -122,24 +122,24 @@ int generar_una_cancion(Cancion *c, int id)
     c->id = id;
 
 
-    //Esto combinara 2 palabras al azar del arreglo palabras_titulo
-    //(Esto no sera el titulo real de las canciones sino un dato generado
-    //(el enunciado permite formar texto aleatorio)
-    //Lo anterior lo aclaro para que no hayan confusiones, los titulos de las canciones no son reales o propios de los artistas
-    //snprintf en este caso respeta el tamaño maximo de TITULO_MAX y evita desbordar el mismo buffer propio
+//Esto combinara 2 palabras al azar del arreglo palabras_titulo
+//(Esto no sera el titulo real de las canciones sino un dato generado
+//(el enunciado permite formar texto aleatorio)
+//Lo anterior lo aclaro para que no hayan confusiones, los titulos de las canciones no son reales o propios de los artistas
+//snprintf en este caso respeta el tamaño maximo de TITULO_MAX y evita desbordar el mismo buffer propio
     snprintf(c->titulo, TITULO_MAX, "%s %s",
              palabras_titulo[rand() % num_palabras],
              palabras_titulo[rand() % num_palabras]);
 
-    //Volvemos a combinar 2 palabras al azar
+//Volvemos a combinar 2 palabras al azar
     snprintf(c->album, ALBUM_MAX, "%s %s",
              palabras_titulo[rand() % num_palabras],
              palabras_titulo[rand() % num_palabras]);
 
-    //Aqui elegimos un artista desde el arreglo artistas_disponibles
+//Aqui elegimos un artista desde el arreglo artistas_disponibles
     strcpy(c->artista, artistas_disponibles[rand() % num_artistas]);
 
-    //Elegimos un genro de el arreglo generos_disponibles
+//Elegimos un genro de el arreglo generos_disponibles
     strcpy(c->genero, generos_disponibles[rand() % num_generos]);
 
     //Definimos un numero aleatorio de duracion_seg que este permitido dentro de los rangos
