@@ -294,7 +294,7 @@ int busqueda_binaria_titulo_artista(Cancion arr[], int izq, int der, char* x, in
  * @param n numero de canciones
  * @param artista artista a buscar
  */
-void obtener_Canciones_artista(Cancion arr[], int n, char artista[]) {
+void obtener_canciones_artista(Cancion arr[], int n, char artista[]) {
     int i;
     int cont = 0;
 
@@ -359,7 +359,7 @@ void ranking(Cancion arr[], int n, int top) {
  * @param campo atributo a buscar 1=artista 2=genero
  * @param texto donde se ingresa artista o genero
  */
-void obtener_Cancion_mas_escuchada(Cancion arr[], int n, int campo, char texto[]) {
+void obtener_cancion_mas_escuchada(Cancion arr[], int n, int campo, char texto[]) {
     int i;
 
     //se llama al metodo de ordenamiento con el campo de reproducciones

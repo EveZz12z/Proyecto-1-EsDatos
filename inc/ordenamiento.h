@@ -19,11 +19,11 @@ int busqueda_binaria_id(Cancion arr[], int izq, int der, int x);
 
 int busqueda_binaria_titulo_artista(Cancion arr[], int izq, int der, char* x, int campo);
 
-void obtener_Canciones_artista(Cancion arr[], int n, char artista[]);
+void obtener_canciones_artista(Cancion arr[], int n, char artista[]);
 
 void ranking(Cancion arr[], int n, int top);
 
-void obtener_Cancion_mas_escuchada(Cancion arr[], int n, int campo, char texto[]);
+void obtener_cancion_mas_escuchada(Cancion arr[], int n, int campo, char texto[]);
 
 
 

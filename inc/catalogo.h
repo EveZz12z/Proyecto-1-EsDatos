@@ -1,5 +1,3 @@
-
-
 /*Prototipos de las funciones de gestión de catálogo:
 generación aleatoria, validación, mezcla y consultas por género/artista.*/
 
@@ -15,47 +13,44 @@ errores de compilacion (mas cuando mas de una persona va a trabajar con este arc
 
 #include "canciones.h"
 
-
-//Campos por los que se puede ordenar o buscar (escencial para el BubbleSort)
-typedef enum {
-    CAMPO_ID,
-    CAMPO_TITULO,
-    CAMPO_ARTISTA,
-    CAMPO_ALBUM,
-    CAMPO_GENERO,
-    CAMPO_DURACION,
-    CAMPO_ANHO,
-    CAMPO_REPRODUCCIONES
-} CampoCancion;
-
-/* Compara dos canciones segun un campo.
-   Retorna negativo si a < b, 0 en el caso de ser iguales, positivo si a > b. */
-int comparar_canciones(const Cancion *a, const Cancion *b, CampoCancion campo);
-
-/* Ordena catalogo[] de menor a mayor por el campo indicado (Bubble Sort).
-   Retorna 0 si ordeno correctamente o -1 si hay parametros invalidos. */
-int BubbleSort(Cancion catalogo[], int total, CampoCancion campo);
-
 /*Genera n canciones aleatorias dentro de catalogo[]
     Retorna la cantidad de canciones generadas o -1 en el caso que n no sea valido
     (n <= 0 o n > MAX_CANCIONES)*/
 int generar_catalogo(Cancion catalogo[], int n);
 
-
+/* Verifica la duracion, anho y num_reproducciones de la cancion esten dentro
+   de los rangos de canciones.h*/
 int validar_cancion(const Cancion *c);
 
+/* Rellena la cancion con sus correspondientes datos aleatorios (titulo y album formados con
+   palabras al azar, artista y genero elegidos desde arreglos) ademas se le asigna un id*/
 int generar_una_cancion(Cancion *c, int id);
 
+/* Mezcla aleatoriamente las primeras total canciones de catalogo[]*/
 void mezclar_catalogo(Cancion catalogo[], int total);
 
+/* Guarda en el arreglo artistas[] los nombres de artista distintos del catalogo, sin repetir estos*/
 int listar_artistas(const Cancion catalogo[], int total, char artistas[][ARTISTA_MAX], int max_artistas);
 
+/* Cuenta cuantas canciones del arreglo catalogo[] pertenecen al mismo genero
+   Retorna la cantidad (0 si no hay ninguna) o -1 si hay parametros invalidos. */
 int contar_por_genero(const Cancion catalogo[], int total, const char genero[]);
 
+/* Guarda en indices[] las posiciones de catalogo[] cuyas canciones son del
+   genero correspondiente */
 int listar_por_genero(const Cancion catalogo[], int total, const char genero[],int indices[], int max_resultados);
 
+/* Guarda en generos[] los generos distintos del catalogo sin repetirlos
+   Escribe a lo mas max_generos sus nombres
+   Retorna la cantidad guardada o -1 si hay parametros invalidos. */
 int listar_generos(const Cancion catalogo[], int total, char generos[][GENERO_MAX], int max_generos);
 
-int busqueda_binaria(const Cancion catalogo[], int total, const Cancion *clave, CampoCancion campo);
+/* Crea una copia en memoria dinamica de catalogo[] (el llamador debe hacer free).
+   Retorna NULL si hay parametros invalidos o falla malloc. */
+Cancion *duplicar_catalogo(const Cancion catalogo[], int total);
+
+/* Suma 1 a num_reproducciones de la cancion con ese id (busqueda lineal).
+   Retorna 1 si la encontro o 0 si no existe (o hay parametros invalidos). */
+int incrementar_reproducciones(Cancion catalogo[], int total, int id);
 
 #endif /* CATALOGO_H */

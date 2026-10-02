@@ -12,7 +12,7 @@
  * @brief Verifica que los campos numéricos de una canción estén dentro de los rangos permitidos.
 
  * @param c - puntero a la canción a validar
- * @return int 
+ * @return int si duracion, anho y reproducciones estan dentro de los rangos, 0 si alguno no lo esta
  */
 int validar_cancion(const Cancion *c)
 {
@@ -22,23 +22,23 @@ int validar_cancion(const Cancion *c)
     //para evitar canciones con duraciones negativas o demasiado largas
     if(c->duracion_seg < DURACION_MIN_SEG || c->duracion_seg > DURACION_MAX_SEG)
     {
-        return 0;
+        return 0; //duracion fuera de rango
     }
     //Pasamos al segundo if con respecto al año
     //este debera estar entre los limites de ANHO_MIN y ANHO_MAX
     //Esto evitara años que no existen o futuros fuera de rango
     if(c->anho < ANHO_MIN || c->anho > ANHO_MAX) 
     {
-        return 0;
+        return 0; //anho fuera de rango
     }
     //Pasamos al ultimo if que limita las reproducciones
     //estas no podran ser negativas ni superar el maximo
     if(c->num_reproducciones < 0 || c->num_reproducciones > REPRODUCCIONES_MAX)
     {
-        return 0;
+        return 0; //reproducciones fuera de rango
     }
 
-    return 1;
+    return 1;//todos los campos numericos son validos
 
 }
 
@@ -70,7 +70,7 @@ void mezclar_catalogo(Cancion catalogo[], int total)
 
  * @param c - puntero a la canción que se va a rellenar (salida)
  * @param id - identificador que se asigna a la canción
- * @return int 
+ * @return int 1 cuando la cancion fue generada (siempre; la validez de los rangos la comprueba en este caso generar_catalogo)
  */
 int generar_una_cancion(Cancion *c, int id)
 {
@@ -159,7 +159,7 @@ int generar_una_cancion(Cancion *c, int id)
  * 
  * @param catalogo - arreglo de salida (capacidad mínima n)
  * @param n - cantidad de canciones a generar
- * @return int 
+ * @return int "n" (cantidad de canciones generadas) o -1 si n <= 0 o n > MAX_CANCIONES
  */
 int generar_catalogo(Cancion catalogo[], int n)
 {
@@ -190,7 +190,7 @@ int generar_catalogo(Cancion catalogo[], int n)
  * @param catalogo - arreglo de canciones
  * @param total - cantidad de canciones en catalogo[]
  * @param genero - genero a buscar
- * @return int 
+ * @return int cantidad de canciones del genero (0 si no hay ninguna) o -1 si hay parametros invalidos
  */
 int contar_por_genero(const Cancion catalogo[], int total, const char genero[])
 {
@@ -222,7 +222,7 @@ int contar_por_genero(const Cancion catalogo[], int total, const char genero[])
  * @param genero - genero a buscar
  * @param indices - arreglo de salida con las posiciones encontradas
  * @param max_resultados - capacidad maxima de indices[]
- * @return int 
+ * @return int cantidad de posiciones guardadas en indices[] (0 si no hay ninguna) o -1 si hay parametros invalidos
  */
 int listar_por_genero(const Cancion catalogo[], int total, const char genero[],int indices[], int max_resultados)
 {
@@ -302,7 +302,7 @@ int listar_artistas(const Cancion catalogo[], int total,char artistas[][ARTISTA_
  * @param total - cantidad de canciones en catalogo
  * @param generos - arreglo de salida con los generos encontrados
  * @param max_generos - capacidad maxima de generos[]
- * @return int 
+ * @return int cantidad de generos guardados en generos[] o -1 si hay parametros invalidos
  */
 int listar_generos(const Cancion catalogo[], int total, char generos[][GENERO_MAX], int max_generos)
 {
@@ -339,133 +339,54 @@ int listar_generos(const Cancion catalogo[], int total, char generos[][GENERO_MA
 }
 
 /**
- * @brief Compara dos canciones segun un campo
+ * @brief Crea una copia del catalogo en memoria dinamica
+ *        (sirve para ordenar o rankear sin alterar el orden del catalogo original)
  *
- * @param a - primera cancion
- * @param b - segunda cancion
- * @param campo - campo por el cual comparar
- * @return int - negativo si a < b, 0 si son iguales, positivo si a > b
- *(0 tambien si el campo llegase a ser no valido)
+ * @param catalogo - arreglo de canciones a copiar
+ * @param total - cantidad de canciones en catalogo[]
+ * @return Cancion* - copia (hay que liberarla con free) o NULL si hay un error
  */
-int comparar_canciones(const Cancion *a, const Cancion *b, CampoCancion campo)
+Cancion *duplicar_catalogo(const Cancion catalogo[], int total)
 {
-    //En los numeros, (x > y) - (x < y) da 1, 0 o -1 sin riesgo de desbordamiento
-    //En los textos strcmp ya devuelve negativo, 0 o positivo
-    switch (campo)
+    if (catalogo == NULL || total <= 0)
     {
-        case CAMPO_ID:
-            return (a->id > b->id) - (a->id < b->id);
-        case CAMPO_TITULO:
-            return strcmp(a->titulo, b->titulo);
-        case CAMPO_ARTISTA:
-            return strcmp(a->artista, b->artista);
-        case CAMPO_ALBUM:
-            return strcmp(a->album, b->album);
-        case CAMPO_GENERO:
-            return strcmp(a->genero, b->genero);
-        case CAMPO_DURACION:
-            return (a->duracion_seg > b->duracion_seg) - (a->duracion_seg < b->duracion_seg);
-        case CAMPO_ANHO:
-            return (a->anho > b->anho) - (a->anho < b->anho);
-        case CAMPO_REPRODUCCIONES:
-            return (a->num_reproducciones > b->num_reproducciones) -
-                   (a->num_reproducciones < b->num_reproducciones);
+        return NULL;
     }
-    return 0;
+
+    Cancion *copia = malloc(total * sizeof(Cancion));
+    if (copia == NULL)
+    {
+        return NULL;
+    }
+
+    memcpy(copia, catalogo, total * sizeof(Cancion));
+    return copia;
 }
 
 /**
- * @brief Ordena el catalogo de menor a mayor usando Bubble Sort
+ * @brief Suma una reproduccion a la cancion con el id indicado
+ *        (busqueda lineal porque el catalogo puede estar ordenado por cualquier campo)
  *
  * @param catalogo - arreglo de canciones (se modifica)
  * @param total - cantidad de canciones en catalogo[]
- * @param campo - campo por el cual ordenar
- * @return int - 0 si ordeno correctamente, -1 en el caso de que existan parametros invalidos
+ * @param id - id de la cancion reproducida
+ * @return int - 1 si se actualizo, 0 si el id no existe o hay parametros invalidos
  */
-int BubbleSort(Cancion catalogo[], int total, CampoCancion campo)
+int incrementar_reproducciones(Cancion catalogo[], int total, int id)
 {
-    if (catalogo == NULL || total < 0)
+    if (catalogo == NULL || total <= 0)
     {
-        return -1;
+        return 0;
     }
 
-    for (int pasada = 0; pasada < total - 1; pasada++)
+    for (int i = 0; i < total; i++)
     {
-        int hubo_intercambio = 0;
-
-        //Tras cada pasada el mayor queda al final por eso el limite baja
-        for (int j = 0; j < total - 1 - pasada; j++)
+        if (catalogo[i].id == id)
         {
-            if (comparar_canciones(&catalogo[j], &catalogo[j + 1], campo) > 0)
-            {
-                Cancion temp = catalogo[j];
-                catalogo[j] = catalogo[j + 1];
-                catalogo[j + 1] = temp;
-                hubo_intercambio = 1;
-            }
-        }
-
-        //Si no hubo ningun cambio el arreglo ya esta ordenado
-        if (!hubo_intercambio)
-        {
-            break;
+            catalogo[i].num_reproducciones++;
+            return 1;
         }
     }
+
     return 0;
-}
-
-/**
- * @brief Auxiliar recursiva de la busqueda binaria (solo visible en este archivo)
- *
- * @param catalogo - arreglo ordenado por el campo buscado
- * @param izq - limite izquierdo del rango actual
- * @param der - limite derecho del rango actual
- * @param clave - cancion con el campo a buscar
- * @param campo - campo por el cual se busca
- * @return int - posicion encontrada o -1 si el rango queda vacio
- */
-static int busqueda_binaria_rec(const Cancion catalogo[], int izq, int der,
-                                const Cancion *clave, CampoCancion campo)
-{
-    //Caso base: rango vacio, el elemento no esta
-    if (izq > der)
-    {
-        return -1;
-    }
-
-    //izq + (der - izq) / 2 equivale a (izq + der) / 2 pero evita desbordar int
-    int medio = izq + (der - izq) / 2;
-    int cmp = comparar_canciones(clave, &catalogo[medio], campo);
-
-    //Caso base: lo encontramos
-    if (cmp == 0)
-    {
-        return medio;
-    }
-
-    //Caso recursivo: seguimos solo con la mitad que puede contenerlo
-    if (cmp < 0)
-    {
-        return busqueda_binaria_rec(catalogo, izq, medio - 1, clave, campo);
-    }
-    return busqueda_binaria_rec(catalogo, medio + 1, der, clave, campo);
-}
-
-/**
- * @brief Busca una cancion por un campo usando busqueda binaria recursiva
- *
- * @param catalogo - arreglo de canciones ORDENADO por ese mismo campo
- * @param total - cantidad de canciones en catalogo[]
- * @param clave - cancion cuyo campo indicado es el valor a buscar
- * @param campo - campo por el cual buscar
- * @return int - posicion encontrada, o -1 si no existe o hay parametros invalidos
- */
-int busqueda_binaria(const Cancion catalogo[], int total, const Cancion *clave, CampoCancion campo)
-{
-    if (catalogo == NULL || clave == NULL || total <= 0)
-    {
-        return -1;
-    }
-
-    return busqueda_binaria_rec(catalogo, 0, total - 1, clave, campo);
 }
