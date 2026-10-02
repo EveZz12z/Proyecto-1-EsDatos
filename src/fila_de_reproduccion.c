@@ -85,7 +85,7 @@ void consultar_fila(Cancion filas[MAX_CANCIONES]){
             return;
         }
         cont++;
-        printf("%d |\t %d %s %s", cont, filas[i].id,
+        printf("%d |\t %d %s %s\n", cont, filas[i].id,
                 filas[i].titulo, filas[i].artista);
     }
     return;
@@ -143,18 +143,17 @@ int eliminar_cancion_por_id(Cancion filas[MAX_CANCIONES], Cancion cancion){
  * @param k Entero tamaño del historial
  */
 void consultar_historial_fila(Cancion historial[], int k){
-    if(historial[k-1].id ==-1 ){
-            if(k-1 == 0)
-                printf("Historial vacío\n");
-            return;
-        }
-
-    printf("=========== HISTORIAL ===========");
-    for(int i = 0; i < k; i++){
-        printf("%d |%d %s %s %d\n", i + 1, historial[i].id, historial[i].titulo,
-        historial->artista, historial->num_reproducciones);
+    if(historial[0].id == -1){
+        printf("Historial vacío\n");
+        return;
     }
-    
+
+    printf("=========== HISTORIAL ===========\n");
+    for(int i = 0; i < k && historial[i].id != -1; i++){
+        printf("%d |\t %d %s %s %d\n", i + 1, historial[i].id, historial[i].titulo,
+               historial[i].artista, historial[i].num_reproducciones);
+    }
+
     return;
 }
 
@@ -208,6 +207,3 @@ int reproduccion_fila(Cancion historial[],Cancion *cancion, int k){
 
     return 0;
 }
-
-
-

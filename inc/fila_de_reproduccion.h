@@ -11,6 +11,8 @@
 #include<string.h>
 #include<stdlib.h>
 
+#include "canciones.h"
+
 void vaciar_fila(Cancion filas[MAX_CANCIONES]);
 int detectar_id(Cancion filas[MAX_CANCIONES], int id);
 int anadir_cancion(Cancion filas[MAX_CANCIONES], Cancion cancion);
@@ -26,4 +28,3 @@ void consultar_historial_fila(Cancion historial[], int k);
 
 
 #endif
-
