@@ -8,9 +8,9 @@ El programa simula un reproductor de música utilizando arreglos para administra
 
 ## Integrantes
 
-- Nombre integrante 1
-- Nombre integrante 2
-- Nombre integrante 3
+- Pablo Serón
+- José Cáceres
+- Yanira Mansilla
 
 ---
 
