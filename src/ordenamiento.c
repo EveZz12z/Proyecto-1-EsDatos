@@ -2,8 +2,20 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ordenamiento.h"
+#include "canciones.h" 
+#include "catalogo.h"  
 
-int comparar_canciones(cancion a, cancion b, int campo) {
+
+
+/**
+ * @brief 
+ * 
+ * @param a 
+ * @param b 
+ * @param campo 
+ * @return int 
+ */
+int Cancion_va_antes(Cancion a, Cancion b, int campo) {
 
     switch (campo) {
 
@@ -14,10 +26,10 @@ int comparar_canciones(cancion a, cancion b, int campo) {
         return a.anho <= b.anho;
 
     case 3:
-        return a.duracion <= b.duracion;
+        return a.duracion_seg <= b.duracion_seg;
 
     case 4:
-        return a.reproducciones <= b.reproducciones;
+        return a.num_reproducciones <= b.num_reproducciones;
 
     case 5:
         return strcmp(a.titulo, b.titulo) <= 0;
@@ -36,12 +48,17 @@ int comparar_canciones(cancion a, cancion b, int campo) {
     }
 }
 
-// arr: catálogo que quieres ordenar
-// n: numero de canciones
-// campo: atributo a vallidar y ordenar
-void selection_sort(cancion arr[], int n, int campo) {
-    //variable temporal para guardar la cancion y luego cambiarla completa
-    cancion temp;
+
+
+/**
+ * @brief 
+ * @param arr catalogo que quieres ordenar
+ * @param n numero de canciones
+ * @param campo atributos a validar
+ */
+void selection_sort(Cancion arr[], int n, int campo) {
+    //variable temporal para guardar la Cancion y luego cambiarla completa
+    Cancion temp;
 
     if (campo < 1 || campo > 8) {
         printf("Campo invalido\n");
@@ -56,8 +73,8 @@ void selection_sort(cancion arr[], int n, int campo) {
         //recorre las posiciones despues de i
         for (int j = i + 1; j < n; j++) {
 
-            //si j debe ir antes que la cancion menor acutal, se guarda
-            if (comparar_canciones(arr[j], arr[min_index], campo)) {
+            //si j debe ir antes que la Cancion menor acutal, se guarda
+            if (Cancion_va_antes(arr[j], arr[min_index], campo)) {
                 min_index = j;
             }
         }
@@ -69,7 +86,12 @@ void selection_sort(cancion arr[], int n, int campo) {
     }
 }
 
-void mostrar_catalogo(cancion arr[], int n) {
+/**
+ * @brief 
+ * @param arr catalogo 
+ * @param n numero de canciones
+ */
+void mostrar_catalogo(Cancion arr[], int n) {
     for (int i = 0; i < n; i++) {
         printf("ID: %d | Titulo: %s | Artista: %s | Album: %s | Genero: %s | Duracion: %d | Anho: %d | Reproducciones: %d\n",
             arr[i].id,
@@ -77,18 +99,22 @@ void mostrar_catalogo(cancion arr[], int n) {
             arr[i].artista,
             arr[i].album,
             arr[i].genero,
-            arr[i].duracion,
+            arr[i].duracion_seg,
             arr[i].anho,
-            arr[i].reproducciones);
+            arr[i].num_reproducciones);
     }
 }
-// arr: catálogo que quieres ordenar
-// aux: arreglo auxiliar 
-// izq: inicio de la sección actual
-// m: medio
-// der: final de la sección actual
-// campo: atributo por el que estás ordenando
-void merge(cancion arr[], cancion aux[], int izq, int m, int der, int campo) {
+
+/**
+ * @brief 
+ * @param arr catalogo que quieres ordenar
+ * @param aux arreglo auxiliar
+ * @param izq inicio de la seccion actual
+ * @param m medio
+ * @param der final de la seccion actual
+ * @param campo atributo por el que estas ordenando
+ */
+void merge(Cancion arr[], Cancion aux[], int izq, int m, int der, int campo) {
 
     int i = izq;
     int j = m + 1;
@@ -114,13 +140,13 @@ void merge(cancion arr[], cancion aux[], int izq, int m, int der, int campo) {
             i++;
         }
 
-        //si la cancion de la izquierda va antes
-        else if (comparar_canciones(aux[i], aux[j], campo)) {
+        //si la Cancion de la izquierda va antes
+        else if (Cancion_va_antes(aux[i], aux[j], campo)) {
             arr[k] = aux[i];
             i++;
         }
 
-        //si la cancion de la derecha va antes
+        //si la Cancion de la derecha va antes
         else {
             arr[k] = aux[j];
             j++;
@@ -128,12 +154,15 @@ void merge(cancion arr[], cancion aux[], int izq, int m, int der, int campo) {
     }
 }
 
-// arr: catálogo que quieres ordenar
-// aux: arreglo auxiliar que usa merge()
-// izq: inicio de la sección actual
-// der: final de la sección actual
-// campo: atributo por el que estás ordenando
-void mergeSort_recursivo(cancion arr[], cancion aux[], int izq, int der, int campo) {
+/**
+ * @brief 
+ * @param arr catalogo que quieres ordenar 
+ * @param aux arreglo auxiliar que usa merge()
+ * @param izq inicio de la seccion actual
+ * @param der final de la seccion actual
+ * @param campo atributo por el que estas ordenando
+ */
+void mergeSort_recursivo(Cancion arr[], Cancion aux[], int izq, int der, int campo) {
 
     //caso base
     if (izq >= der) {
@@ -150,11 +179,13 @@ void mergeSort_recursivo(cancion arr[], cancion aux[], int izq, int der, int cam
     merge(arr, aux, izq, medio, der, campo);
 }
 
-// se ejecuta megresort
-// arr: catalogo de canciones
-// n: cantidad de canciones
-// campo: criterio  para ordenar.
-void mergeSort(cancion arr[], int n, int campo) {
+/**
+ * @brief 
+ * @param arr catalogo que quieres ordenar 
+ * @param n numero de canciones
+ * @param campo criterio para ordenar
+ */
+void mergeSort(Cancion arr[], int n, int campo) {
 
     if (campo < 1 || campo > 8) {
         printf("Campo invalido\n");
@@ -162,7 +193,7 @@ void mergeSort(cancion arr[], int n, int campo) {
     }
 
     //reserva memoria para un arreglo auxiliar
-    cancion* aux = malloc(n * sizeof(cancion));
+    Cancion* aux = malloc(n * sizeof(Cancion));
 
     if (aux == NULL) {
         printf("Error al reservar memoria\n");
@@ -175,11 +206,15 @@ void mergeSort(cancion arr[], int n, int campo) {
     free(aux);
 }
 
-// arr arreglo de canciones
-// izq índice inicial de la zona donde estás buscando
-// der índice final
-// x ID que quieres encontrar
-int busqueda_binaria_id(cancion arr[], int izq, int der, int x) {
+/**
+ * @brief 
+ * @param arr arreglo de canciones 
+ * @param izq indice inicial de la zona que estas buscando
+ * @param der indice final
+ * @param x ID que quieres buscar
+ * @return 
+ */
+int busqueda_binaria_id(Cancion arr[], int izq, int der, int x) {
     
     //caso base
     if (izq > der) {
@@ -207,12 +242,16 @@ int busqueda_binaria_id(cancion arr[], int izq, int der, int x) {
     }
 }
 
-// arr arreglo de canciones
-// izq índice inicial de la zona donde estás buscando
-// der índice final
-// x texto que se quiere busscar
-// campo atributo a buscar
-int busqueda_binaria_titulo_artista(cancion arr[], int izq, int der, char* x, int campo) {
+/**
+ * @brief 
+ * @param arr arreglo de canciones
+ * @param izq indice inicial de la zona donde estas buscando
+ * @param der indice final
+ * @param x texto que quiere buscar
+ * @param campo atributo a buscar
+ * @return 
+ */
+int busqueda_binaria_titulo_artista(Cancion arr[], int izq, int der, char* x, int campo) {
     
     //caso base
     if (izq > der) {
@@ -249,14 +288,17 @@ int busqueda_binaria_titulo_artista(cancion arr[], int izq, int der, char* x, in
     }
 }
 
-// arr arreglo de canciones
-// n numero de canciones
-// artista a buscar
-void obtener_canciones_artista(cancion arr[], int n, char artista[]) {
+/**
+ * @brief 
+ * @param arr arreglo de canciones
+ * @param n numero de canciones
+ * @param artista artista a buscar
+ */
+void obtener_Canciones_artista(Cancion arr[], int n, char artista[]) {
     int i;
     int cont = 0;
 
-    //recorre las canciones
+    //recorre las Canciones
     for (i = 0; i < n; i++) {
         //si coinciden se imprimen y se van sumando en cont
         if (strcmp(arr[i].artista, artista) == 0) {
@@ -270,10 +312,13 @@ void obtener_canciones_artista(cancion arr[], int n, char artista[]) {
     }
 }
 
-// arr arreglo de canciones
-// n numero de canciones
-//top el top que se quiera buscar
-void ranking(cancion arr[], int n, int top) {
+/**
+ * @brief 
+ * @param arr arreglo de canciones
+ * @param n numero de canciones
+ * @param top el top que quiere buscar
+ */
+void ranking(Cancion arr[], int n, int top) {
     int i;
     int cont = 1;
 
@@ -290,7 +335,7 @@ void ranking(cancion arr[], int n, int top) {
     selection_sort(arr, n, 4);
 
     printf("==================================================================================\n");
-    printf("Top %d de canciones con mas reproducciones:\n", top);
+    printf("Top %d de Canciones con mas reproducciones:\n", top);
     printf("----------------------------------------------------------------------------------\n");
 
     //selecion sort viene de menor a mayor, este for invierte eso
@@ -299,7 +344,7 @@ void ranking(cancion arr[], int n, int top) {
             cont,
             arr[i].titulo,
             arr[i].artista,
-            arr[i].reproducciones);
+            arr[i].num_reproducciones);
 
         cont++;
     }
@@ -307,11 +352,14 @@ void ranking(cancion arr[], int n, int top) {
     printf("==================================================================================\n");
 }
 
-// arr arreglo de canciones
-// n numero de canciones
-// campo atributo a buscar 1=artista 2=genero
-//texto donde se ingresara artista o genero
-void obtener_cancion_mas_escuchada(cancion arr[], int n, int campo, char texto[]) {
+/**
+ * @brief 
+ * @param arr arreglo de canciones
+ * @param n numero de canciones
+ * @param campo atributo a buscar 1=artista 2=genero
+ * @param texto donde se ingresa artista o genero
+ */
+void obtener_Cancion_mas_escuchada(Cancion arr[], int n, int campo, char texto[]) {
     int i;
 
     //se llama al metodo de ordenamiento con el campo de reproducciones
@@ -323,11 +371,11 @@ void obtener_cancion_mas_escuchada(cancion arr[], int n, int campo, char texto[]
         //se recorre el arreglo del final al principio
         for (i = n - 1; i >= 0; i--) {
 
-            //si coinciden se imprime la cancion mas escuchada
+            //si coinciden se imprime la Cancion mas escuchada
             if (strcmp(arr[i].artista, texto) == 0) {
                 printf("Cancion mas escuchada de %s: %s con: %d reproducciones\n",
                     texto,
-                    arr[i].titulo, arr[i].reproducciones);
+                    arr[i].titulo, arr[i].num_reproducciones);
                 return;
             }
         }
@@ -340,10 +388,10 @@ void obtener_cancion_mas_escuchada(cancion arr[], int n, int campo, char texto[]
         for (i = n - 1; i >= 0; i--) {
             if (strcmp(arr[i].genero, texto) == 0) {
             
-                //si coinciden se imprime la cancion mas escuchada
+                //si coinciden se imprime la Cancion mas escuchada
                 printf("Cancion mas escuchada de %s: %s con: %d reproducciones\n",
                     texto,
-                    arr[i].titulo, arr[i].reproducciones);
+                    arr[i].titulo, arr[i].num_reproducciones);
                 return;
             }
         }
